@@ -26,6 +26,29 @@ notesRouter.get("/" , async (req,res)=>{
 
 })
 
+// get notes by id //
+
+
+
+notesRouter.get("/:id" , async (req,res)=>{
+
+    let id = req.params.id
+
+    try{
+ 
+     let notes = await noteModel.find({
+        _id
+        :id})
+     res.send(notes)
+ 
+ 
+    }catch(err){
+     res.send({"msg":"error","err":err.message})
+    }
+ 
+ 
+ })
+
 
 
 
@@ -58,14 +81,15 @@ notesRouter.patch("/update/:id", async (req,res)=>{
  let userid = req.body.userID
  
     try{
-
+        let note= await noteModel.findOne({_id:id})
+    if(note){
         if(noteid===userid){
-         await noteModel.findByIdAndUpdate({_id:id},payload)
+         await noteModel.findByIdAndUpdate({_id:id},{payload})
          res.send({"msg":"note updated successfully"})
         }else{
             res.send({"msg":"you are not authorized"})
         }
-     
+    }
       
     
     }catch(err){
